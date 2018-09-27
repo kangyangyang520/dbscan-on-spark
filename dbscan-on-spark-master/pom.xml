@@ -9,21 +9,13 @@
 	<version>0.2.0-SNAPSHOT</version>
 
 	<name>Distributed DBSCAN on Apache Spark</name>
-	<url>http://www.irvingc.com/dbscan-on-spark</url>
 	<packaging>jar</packaging>
-
-	<scm>
-		<connection>scm:git:https://github.com/irvingc/dbscan-on-spark</connection>
-		<developerConnection>scm:git:git@github.com:irvingc/dbscan-on-spark.git</developerConnection>
-		<url>https://github.com/irvingc/dbscan-on-spark</url>
-	</scm>
 
 	<developers>
 		<developer>
-			<id>irvingc</id>
-			<name>Irving Cordova</name>
-			<email>irving@irvingc.com</email>
-			<url>http://www.irvingc.com</url>
+			<id>mhcone</id>
+			<name>hanchengmiao</name>
+			<email>hanchengmiao@gmail.com</email>
 		</developer>
 	</developers>
 
