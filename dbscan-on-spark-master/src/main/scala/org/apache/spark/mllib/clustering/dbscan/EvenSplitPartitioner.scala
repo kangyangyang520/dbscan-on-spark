@@ -187,8 +187,15 @@ class EvenSplitPartitioner(
     * Returns true if the given rectangle can be split into at least two rectangles of minimum size
     */
   private def canBeSplit(box: DBSCANRectangle): Boolean = {
-    (box.x2 - box.x > minimumRectangleSize * 2 ||
-      box.y2 - box.y > minimumRectangleSize * 2)
+    //    (box.x2 - box.x > minimumRectangleSize * 2 ||
+    //      box.y2 - box.y > minimumRectangleSize * 2)
+    for (a <- 0 to box.x.size) {
+      if (box.x(a) - box.y(a) > minimumRectangleSize * 2) {
+        true
+      } else {
+        false
+      }
+    }
   }
 
   def pointsInRectangle(space: Set[RectangleWithCount], rectangle: DBSCANRectangle): Int = {
@@ -199,8 +206,8 @@ class EvenSplitPartitioner(
       }
   }
 
+  import Array._
   def findBoundingRectangle(rectanglesWithCount: Set[RectangleWithCount]): DBSCANRectangle = {
-
     val invertedRectangle =
       DBSCANRectangle(Double.MaxValue, Double.MaxValue, Double.MinValue, Double.MinValue)
 
