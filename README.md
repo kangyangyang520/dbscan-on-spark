@@ -50,6 +50,6 @@ DBSCAN on Spark is available under the Apache 2.0 license.
 See the [LICENSE](LICENSE) file for details.
 
 
-### Credits
-
-DBSCAN on Spark is maintained by Irving Cordova (irving@irvingc.com).
+### Email
+- If you have any question, you can communicate with me .
+hanchengmiao@gmail.com
