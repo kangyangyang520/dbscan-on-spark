@@ -28,9 +28,7 @@ object Main {
     val data = sparkConstruct.readDF(conf.inputSql())
     val row_key = data.select(conf.rowKey())
     data.drop(conf.rowKey())
-    //    df.select(array(df.columns.map(col(_)): _*)).rdd.map(_.getSeq[Double](0))
     val new_rdd = data.rdd.map(f => f.toSeq.map(_.toString.toDouble)).map(f => Vectors.dense(f.toArray))
-
     DBSCAN.train(new_rdd, conf.eps(), conf.minPoints(), conf.maxPointsPerPartition())
 
 
