@@ -20,6 +20,7 @@ import scala.annotation.tailrec
 import org.apache.spark.internal.Logging
 import org.apache.spark.mllib.linalg.Vectors
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.Seq
 import scala.math._
 
 /**
@@ -154,17 +155,32 @@ class EvenSplitPartitioner(
     */
   private def findPossibleSplits(box: DBSCANRectangle): Set[DBSCANRectangle] = {
 
-    val xSplits = (box.x + minimumRectangleSize) until box.x2 by minimumRectangleSize
-
-    val ySplits = (box.y + minimumRectangleSize) until box.y2 by minimumRectangleSize
-
-    val splits =
-      xSplits.map(x => DBSCANRectangle(box.x, box.y, x, box.y2)) ++
-        ySplits.map(y => DBSCANRectangle(box.x, box.y, box.x2, y))
-
-    logTrace(s"Possible splits: $splits")
-
-    splits.toSet
+    //    val xSplits = (box.x + minimumRectangleSize) until box.x2 by minimumRectangleSize
+    //
+    //    val ySplits = (box.y + minimumRectangleSize) until box.y2 by minimumRectangleSize
+    //
+    //    val splits =
+    //      xSplits.map(x => DBSCANRectangle(box.x, box.y, x, box.y2)) ++
+    //        ySplits.map(y => DBSCANRectangle(box.x, box.y, box.x2, y))
+    //
+    //    logTrace(s"Possible splits: $splits")
+    //
+    //    splits.toSet
+    import scala.collection.mutable.Map
+    var split = new ArrayBuffer[DBSCANRectangle]()
+    var maps: Map[Int, Any] = Map()
+    for (a <- 0 to box.x.size) {
+      var tmp_list = ((box.x(a) + minimumRectangleSize) until box.y(a) by minimumRectangleSize).toArray
+      maps = maps ++ Map(a -> tmp_list)
+    }
+    for (a <- maps.keys) {
+      for (b <- maps(a)) {
+        var new_list = box.x.toArray.toSeq
+        new_list(a) = b
+        split = split ++ ArrayBuffer(DBSCANRectangle(box.x, Vectors.dense(new_list.toArray)))
+      }
+    }
+    split.toSet
   }
 
   /**
