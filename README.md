@@ -5,8 +5,10 @@
 This is an implementation of the [DBSCAN clustering algorithm](http://en.wikipedia.org/wiki/DBSCAN) 
 on top of [Apache Spark](http://spark.apache.org/). It is loosely based on the paper from He, Yaobin, et al.
 ["MR-DBSCAN: a scalable MapReduce-based DBSCAN algorithm for heavily skewed data"](http://www.researchgate.net/profile/Yaobin_He/publication/260523383_MR-DBSCAN_a_scalable_MapReduce-based_DBSCAN_algorithm_for_heavily_skewed_data/links/0046353a1763ee2bdf000000.pdf). 
-I have overrided the version of Irving Cordova .
-His version only can apply on two-dimensional dataset , however i have changed this promblem.
+
+- I have overrided the version of Irving Cordova .
+- His version only can apply on two-dimensional dataset , however i have changed this promblem.
+- And this version is undone. I'm working on it .
 
 DBSCAN on Spark is built against Scala 2.10.
 
