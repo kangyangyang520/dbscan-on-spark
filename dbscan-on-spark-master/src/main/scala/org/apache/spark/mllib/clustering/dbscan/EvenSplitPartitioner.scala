@@ -168,16 +168,20 @@ class EvenSplitPartitioner(
     //    splits.toSet
     import scala.collection.mutable.Map
     var split = new ArrayBuffer[DBSCANRectangle]()
-    var maps: Map[Int, Any] = Map()
+    var maps: Map[Int, Array[Double]] = Map()
     for (a <- 0 to box.x.size) {
       var tmp_list = ((box.x(a) + minimumRectangleSize) until box.y(a) by minimumRectangleSize).toArray
       maps = maps ++ Map(a -> tmp_list)
     }
     for (a <- maps.keys) {
-      for (b <- maps(a)) {
-        var new_list = box.x.toArray.toSeq
-        new_list(a) = b
-        split = split ++ ArrayBuffer(DBSCANRectangle(box.x, Vectors.dense(new_list.toArray)))
+      for (b <- maps.get(a)) {
+        var new_list = box.x.toArray.toBuffer
+        //        var new_buffer = ArrayBuffer(new_list)
+        for (c <- b) {
+          new_list(a) = c
+          split = split ++ ArrayBuffer(DBSCANRectangle(box.x, Vectors.dense(new_list.toArray)))
+        }
+
       }
     }
     split.toSet
@@ -186,16 +190,27 @@ class EvenSplitPartitioner(
   /**
     * Returns true if the given rectangle can be split into at least two rectangles of minimum size
     */
+
+  import scala.util.control._
+
   private def canBeSplit(box: DBSCANRectangle): Boolean = {
     //    (box.x2 - box.x > minimumRectangleSize * 2 ||
     //      box.y2 - box.y > minimumRectangleSize * 2)
-    for (a <- 0 to box.x.size) {
-      if (box.x(a) - box.y(a) > minimumRectangleSize * 2) {
-        true
-      } else {
-        false
+    val loop = new Breaks
+
+    var mark = !false
+
+    loop.breakable {
+      for (a <- 0 to box.x.size) {
+        if (box.x(a) - box.y(a) > minimumRectangleSize * 2) {
+          mark = true
+          loop.break
+        } else {
+          mark = false
+        }
       }
     }
+    mark
   }
 
   def pointsInRectangle(space: Set[RectangleWithCount], rectangle: DBSCANRectangle): Int = {
@@ -206,18 +221,33 @@ class EvenSplitPartitioner(
       }
   }
 
-  import Array._
   def findBoundingRectangle(rectanglesWithCount: Set[RectangleWithCount]): DBSCANRectangle = {
-    val invertedRectangle =
-      DBSCANRectangle(Double.MaxValue, Double.MaxValue, Double.MinValue, Double.MinValue)
-
-    rectanglesWithCount.foldLeft(invertedRectangle) {
-      case (bounding, (c, _)) =>
-        DBSCANRectangle(
-          bounding.x.min(c.x), bounding.y.min(c.y),
-          bounding.x2.max(c.x2), bounding.y2.max(c.y2))
+    val a = rectanglesWithCount.toList(0)._1.x.size
+    //    val bounding = new Array[Double](a)
+    val minPoint = ArrayBuffer.fill(a)(Double.MaxValue)
+    val maxPoint = ArrayBuffer.fill(a)(Double.MinValue)
+    for (item <- rectanglesWithCount) {
+      for (b <- 0 to a) {
+        minPoint(b) = max(min(rectanglesWithCount.toList(0)._1.x.toArray(b), rectanglesWithCount.toList(0)._1.y.toArray(b)), minPoint(b))
+        maxPoint(b) = min(max(rectanglesWithCount.toList(0)._1.x.toArray(b), rectanglesWithCount.toList(0)._1.y.toArray(b)), maxPoint(b))
+      }
     }
+    DBSCANRectangle(Vectors.dense(minPoint.toArray), Vectors.dense(maxPoint.toArray))
 
+    //    val mins = fold(ds, minPoint, x => Math.min(x._1, x._2))
+    //    val maxs = fold(ds, maxPoint, x => Math.max(x._1, x._2))
+    //
+    //    mins.coordinates.zip(maxs.coordinates).map(x => new BoundsInOneDimension(x._1, x._2, true)).toList
+    //
+    //    val invertedRectangle =
+    //      DBSCANRectangle(Double.MaxValue, Double.MaxValue, Double.MinValue, Double.MinValue)
+    //
+    //    rectanglesWithCount.foldLeft(invertedRectangle) {
+    //      case (bounding, (c, _)) =>
+    //        DBSCANRectangle(
+    //          bounding.x.min(c.x), bounding.y.min(c.y),
+    //          bounding.x2.max(c.x2), bounding.y2.max(c.y2))
   }
+
 
 }

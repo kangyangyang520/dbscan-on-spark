@@ -33,7 +33,8 @@ case class DBSCANPoint(val vector: Vector) {
     for (a <- 0 to x.size) {
       sum = sum + (x(a) - other.x(a)) * (x(a) - other.x(a))
     }
-    sum = sqrt(sum)
+    sqrt(sum)
+
 
 
   }
