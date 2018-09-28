@@ -7,9 +7,11 @@ on top of [Apache Spark](http://spark.apache.org/). It is loosely based on the p
 ["MR-DBSCAN: a scalable MapReduce-based DBSCAN algorithm for heavily skewed data"](http://www.researchgate.net/profile/Yaobin_He/publication/260523383_MR-DBSCAN_a_scalable_MapReduce-based_DBSCAN_algorithm_for_heavily_skewed_data/links/0046353a1763ee2bdf000000.pdf). 
 
 - I have overrided the version of Irving Cordova .
-- His version only can apply on two-dimensional dataset , however i have changed this promblem.
-- And this version is undone. I'm working on it .
+- His version only can apply on two-dimensional dataset . Now this version can apply on arbitrary-dimension dataset. 
 
+- And the first version has done, and i have released it .
+
+- In this verson , i do not use the r-tree to impore the operating efficiency of this algorithm.
 DBSCAN on Spark is built against Scala 2.10.
 
 ### Example usage 
