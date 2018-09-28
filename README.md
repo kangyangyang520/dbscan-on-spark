@@ -11,7 +11,7 @@ on top of [Apache Spark](http://spark.apache.org/). It is loosely based on the p
 
 - And the first version has done, and i have released it .
 
-- In this verson , i do not use the r-tree to impore the operating efficiency of this algorithm.
+- In this verson , i do not use the r-tree to improve the operating efficiency of this algorithm.
 DBSCAN on Spark is built against Scala 2.10.
 
 ### Example usage 
